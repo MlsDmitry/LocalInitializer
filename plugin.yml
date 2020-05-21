@@ -1,0 +1,9 @@
+---
+name: Player Locale Identifier
+author: MlsDmitry
+website: https://www.youtube.com/channel/UCoCisfxFp0ZWioLxURSnUNA
+api: [3.0.0, 3.12.2, 4.0.0]
+main: mlsdmitry\LocaleInitializer\LocaleInitializer
+description: Identify player's language
+version: 0.1
+...
