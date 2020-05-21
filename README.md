@@ -1,0 +1,2 @@
+# LocalInitializer
+Player Locale identifier
