@@ -16,6 +16,11 @@ class LocaleInitializer extends \pocketmine\plugin\PluginBase implements Listene
 
     public function onEnable()
     {
+        if (!$this->getConfig()->exists('default-country-code')) {
+            $this->getConfig()->set('default-country-code', 'ag');
+            $this->getConfig()->save();
+        }
+
         $this->players = new Config($this->getDataFolder() . DIRECTORY_SEPARATOR . 'players.yml', Config::YAML);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
@@ -305,11 +310,13 @@ class LocaleInitializer extends \pocketmine\plugin\PluginBase implements Listene
         };
 
         $p = $event->getPlayer();
-//        $request = 'http://ip-api.com/json/' . $p->getAddress() . '?fields=status,message,countryCode';
-        $request = 'http://ip-api.com/json/' . '176.59.12.36' . '?fields=status,message,countryCode';
-        $json = json_decode(file_get_contents($request), true);
-        echo $request . PHP_EOL;
-        if ($json['status'] == "success") {
+        if ($this->isLocalIPAddress($p->getAddress())) {
+            $json = ["status" => "success", 'countryCode' => $this->getConfig()->get('default-lang')];
+        } else {
+            $request = 'http://ip-api.com/json/' . $p->getAddress() . '?fields=status,message,countryCode';
+            $json = json_decode(file_get_contents($request), true);
+        }
+        if ($json['status'] === "success") {
             $country = $json['countryCode'];
         } else
             $country = false;
@@ -323,5 +330,13 @@ class LocaleInitializer extends \pocketmine\plugin\PluginBase implements Listene
         $this->players->save();
         // set Lang tag
         $p->namedtag->setString('lang', $this->players->get($p->getUniqueId()->toString()));
+    }
+
+    private function isLocalIPAddress($IPAddress)
+    {
+        if (strpos($IPAddress, '127.0.') === 0)
+            return true;
+
+        return (!filter_var($IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE));
     }
 }
