@@ -6,7 +6,8 @@ Player Locale identifier
 $player->namedtag->getString('lang')
 ```
 
-If you may use this plugin without [LangAPI](https://github.com/MlsDmitry/LangAPI).
-What is LangAPI? It's virion library that helps you to create multilanguage plugins easier.
+You may use this plugin without LangAPI. <br> 
+But more efficient to use LangAPI together. <br>
+What is [LangAPI](https://github.com/MlsDmitry/LangAPI)? It's virion library that helps you to create multilanguage plugins easier.
 
 
